@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>FarmEasy</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<h1>Welcome to FarmEasy</h1>
+	<button id="buyer">Buyer</button>
+	<button id="seller">Seller</button>
+
+	<div id="buyer-form" class="form">
+		<h2>Buyer Information</h2>
+		<form id="buyer-form-data">
+			<label for="product">Product:</label><br>
+			<input type="text" id="product" name="product"><br>
+			<label for="price">Price:</label><br>
+			<input type="number" id="price" name="price"><br>
+			<label for="date">Date:</label><br>
+			<input type="date" id="date" name="date"><br>
+			<label for="time">Time:</label><br>
+			<input type="time" id="time" name="time"><br>
+			<label for="name">Name:</label><br>
+			<input type="text" id="name" name="name"><br>
+			<label for="contact">Contact:</label><br>
+			<input type="text" id="contact" name="contact"><br>
+			<label for="address">Address:</label><br>
+			<input type="text" id="address" name="address"><br>
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+
+	<div id="seller-form" class="form">
+		<h2>Seller Information</h2>
+		<button id="show-buyers">Show Buyers</button>
+		<div id="buyers-data"></div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="script.js"></script>
+</body>
+</html>
+
+<style>
+.form {
+	display: none;
+}
+</style>
+
+<script>
+    $(document).ready(function(){
+	$('#buyer').click(function(){
+		$('.form').hide();
+		$('#buyer-form').show();
+	});
+
+	$('#seller').click(function(){
+		$('.form').hide();
+		$('#seller-form').show();
+	});
+
+	$('#buyer-form-data').submit(function(e){
+		e.preventDefault();
+		var formData = $(this).serialize();
+		$.ajax({
+			type: 'POST',
+			url: 'buyer_process.php',
+			data: formData,
+			success: function(data){
+				console.log(data);
+				$('#buyer-form')[0].reset();
+			}
+		});
+	});
+
+	$('#show-buyers').click(function(){
+		$.ajax({
+			type: 'GET',
+			url: 'seller_process.php',
+			success: function(data){
+				$('#buyers-data').html(data);
+			}
+		});
+	});
+});
+</script>
